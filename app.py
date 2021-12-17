@@ -14,7 +14,17 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-@app.route('/api/v1/text', methods=['POST', 'GET'])
+@app.route('/api/v1/file', methods=['POST'])
+def post_text_summary():
+    pass
+
+
+@app.route('/api/v1/url', methods=['POST'])
+def post_text_summary():
+    pass
+
+
+@app.route('/api/v1/text', methods=['POST'])
 def post_text_summary():
     text = request.values.get('text')
     summary = get_text_from_str(text, 'english')[0]
