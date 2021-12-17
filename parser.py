@@ -12,6 +12,7 @@ from googletrans import Translator
 from language_types import LanguageTypes
 
 SENTENCES_COUNT = 10
+LANGUAGE = "english"
 
 
 def get_text_from_url(url: str) -> list:
@@ -59,20 +60,16 @@ def get_text_from_str(text: str) -> list:
     return get_summary_from_parser(parser)
 
 
-def get_summary_from_parser(parser: PlaintextParser):
+def get_summary_from_parser(parser: PlaintextParser, language: str = LANGUAGE):
     """
     Return summary from parsed response.
 
     :param parser: a PlainTextParser object
+    :param language: a string
     :return: a list of strings
     """
-
-    translator = Translator()
-    detected_language = translator.detect(parser.document.sentences[0])
-    language = LanguageTypes(str(detected_language.lan).capitalize().replace("-", "_"))
-
-    stemmer = Stemmer(language)
+    stemmer = Stemmer(LANGUAGE)
 
     summarizer = Summarizer(stemmer)
-    summarizer.stop_words = get_stop_words(language)
+    summarizer.stop_words = get_stop_words(LANGUAGE)
     return summarizer(parser.document, SENTENCES_COUNT)
