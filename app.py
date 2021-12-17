@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_restful import Api
-from resources.summarizer import get_text_from_url
 from controllers.file_controller import FileController
 from controllers.text_controller import TextController
 from controllers.url_controller import UrlController
