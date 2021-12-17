@@ -3,6 +3,17 @@ from resources.summarizer import get_text_from_url, get_text_from_str
 
 app = Flask(__name__)
 
+@app.route('/api/v1/file')
+def succinct_file():
+    return {'summary': "Summary of FILE text."}
+
+@app.route('/api/v1/url')
+def succinct_url():
+    return {'summary': "Summary of URL text."}
+
+@app.route('/api/v1/text')
+def succinct_text():
+    return {'summary': "Summary of TEXT text."}
 
 @app.route('/')
 def hello_world():
