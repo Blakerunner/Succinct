@@ -1,26 +1,21 @@
 from flask import Flask
+from flask_restful import Api
 from resources.summarizer import get_text_from_url
+from controllers.file_controller import FileController
+from controllers.text_controller import TextController
+from controllers.url_controller import UrlController
 
 app = Flask(__name__)
+api = Api(app)
 
-@app.route('/api/v1/file')
-def succinct_file():
-    return {'summary': "Summary of FILE text."}
-
-@app.route('/api/v1/url')
-def succinct_url():
-    return {'summary': "Summary of URL text."}
-
-@app.route('/api/v1/text')
-def succinct_text():
-    return {'summary': "Summary of TEXT text."}
+api.add_resource(FileController, '/api/v1/text')
+api.add_resource(TextController, '/api/v1/file')
+api.add_resource(UrlController, '/api/v1/url')
 
 @app.route('/')
 def hello_world():
-    get_text_from_url("https://hi.wikipedia.org/wiki/%E0%A4%AE%E0%A5%81%E0%A4%96%E0%A4%AA%E0%A5%83%E0%A4%B7%E0%A5%8D%E0%A4%A0")
     return "Hello World!!"
 
-
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
