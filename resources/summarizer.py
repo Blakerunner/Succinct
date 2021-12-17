@@ -7,7 +7,9 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
-import urllib.request
+import requests
+
+from resources.language_types import LanguageTypes
 
 SENTENCES_COUNT = 10
 LANGUAGE = "english"
@@ -19,9 +21,12 @@ def get_text_from_url(url: str) -> list:
 
     :param url: a string
     :return: list of strings
+    :raise KeyError: if language is not supported
     """
-    parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
-    return get_summary_from_parser(parser, LANGUAGE)
+    request = requests.head(url)
+    language = LanguageTypes[request.headers["Content-language"].replace("-", "_").upper()]
+    parser = HtmlParser.from_url(url, Tokenizer(language))
+    return get_summary_from_parser(parser, language)
 
 
 def get_text_from_file(file_name: str) -> list:
