@@ -1,8 +1,7 @@
-import json
-
 from flask import Flask, request
 import logging
-from summarizer import get_text_from_str, get_text_from_file, get_text_from_url
+import json
+from resources.summarizer import get_text_from_str, get_text_from_file, get_text_from_url
 
 app = Flask(__name__)
 
