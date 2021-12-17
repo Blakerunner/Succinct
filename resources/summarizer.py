@@ -66,8 +66,11 @@ def get_text_from_str(text: str) -> list:
     language = detect(text)
     if language == 'zh-cn' or language == 'zh-tw':
         language = 'zh'
-    parser = PlaintextParser.from_string(text, Tokenizer(language))
-    return get_summary_from_parser(parser, language)
+    try:
+        parser = PlaintextParser.from_string(text, Tokenizer(language))
+        return get_summary_from_parser(parser, language)
+    except LookupError:
+        print("Language not supported")
 
 
 def get_summary_from_parser(parser: PlaintextParser, language: str):
