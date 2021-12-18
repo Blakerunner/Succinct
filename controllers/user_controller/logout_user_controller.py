@@ -8,4 +8,4 @@ class LogoutUserController(Resource):
         return "200"
 
     def post(self):
-        return "This is: api/v1/users/logout"
+        return "USE GET: api/v1/users/logout"

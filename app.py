@@ -9,6 +9,7 @@ from models.db import db
 from controllers.user_controller.login_user_controller import LoginUserController
 from controllers.user_controller.register_user_controller import RegisterUserController
 from controllers.user_controller.logout_user_controller import LogoutUserController
+from controllers.user_controller.current_user_controller import CurrentUserController
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
@@ -25,6 +26,7 @@ api.add_resource(UrlController, '/api/v1/url')
 api.add_resource(LoginUserController, '/api/v1/users/login')
 api.add_resource(RegisterUserController, '/api/v1/users/register')
 api.add_resource(LogoutUserController, '/api/v1/users/logout')
+api.add_resource(CurrentUserController, '/api/v1/users/current_user')
 
 
 @app.route('/')

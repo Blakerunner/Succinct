@@ -8,7 +8,7 @@ bcrypt = Bcrypt()
 
 class LoginUserController(Resource):
     def get(self):
-        return "This is: api/v1/users/login"
+        return "USE POST: api/v1/users/login"
 
     def post(self):
         parser = reqparse.RequestParser()
