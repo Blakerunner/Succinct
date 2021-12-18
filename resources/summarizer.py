@@ -64,7 +64,7 @@ def get_text_from_str(text: str) -> list:
     :return: list of strings
     """
     language = detect(text)
-    if language == 'zh-cn' or language == 'zh-tw':
+    if language in ('zh-cn', 'zh-tw'):
         language = 'zh'
     try:
         parser = PlaintextParser.from_string(text, Tokenizer(language))
