@@ -47,16 +47,21 @@ def get_text_from_file(file_name: str) -> list:
     elif file_name[file_name.rfind('.') + 1:] == "docx":
         return get_text_from_word(file_name)
     else:
-        parser = PlaintextParser.from_file(file_name, Tokenizer(LANGUAGE))
-        return get_summary_from_parser(parser, LANGUAGE)
+        return get_text_from_txt(file_name)
 
 
-def get_text_from_word(file_name: str) -> str:
+def get_text_from_txt(file_name):
+    with open(file_name, "r", encoding="utf-8") as f:
+        data = f.read()
+        return get_text_from_str(data)
+
+
+def get_text_from_word(file_name: str) -> list:
     doc = docx2txt.process(file_name)
     return get_text_from_str(doc)
 
 
-def get_text_from_pdf(file_name: str) -> str:
+def get_text_from_pdf(file_name: str) -> list:
     pdf = PdfFileReader(file_name)
     pdf_str = "\n".join([pdf.getPage(page).extractText() for page in range(pdf.numPages)])
     return get_text_from_str(pdf_str)
@@ -92,4 +97,3 @@ def get_summary_from_parser(parser: PlaintextParser, language: str):
     summarizer = Summarizer(stemmer)
     summarizer.stop_words = get_stop_words(language)
     return [str(sentence) for sentence in summarizer(parser.document, SENTENCES_COUNT)]
-
