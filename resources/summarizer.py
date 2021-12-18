@@ -85,4 +85,4 @@ def get_summary_from_parser(parser: PlaintextParser, language: str):
 
     summarizer = Summarizer(stemmer)
     summarizer.stop_words = get_stop_words(language)
-    return summarizer(parser.document, SENTENCES_COUNT)
+    return [str(sentence) for sentence in summarizer(parser.document, SENTENCES_COUNT)]
