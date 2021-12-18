@@ -16,5 +16,5 @@ class UrlController(Resource):
             summary_text = get_text_from_url(url)
             return {'summary': summary_text}
         else:
-            abort(400, message="text field not found in post request")
+            abort(400, message="url field not found in post request")
 

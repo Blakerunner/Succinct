@@ -1,4 +1,9 @@
+import logging
+
+import werkzeug
 from flask_restful import Resource, reqparse, abort
+from resources.summarizer import get_text_from_file
+
 
 class FileController(Resource):
     def get(self):
@@ -6,14 +11,13 @@ class FileController(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('file', type=str, help='Text to be summarized', required=True)
+        parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
         args = parser.parse_args()
-        if args['text']:
-            text = args['text']
-            summary_text = self.text_summary(text)
-            return {'summary': summary_text}
+        if args['file']:
+            file = args['file']
+            with open(file, 'r') as infile:
+                summary_text = get_text_from_file(file.text)
+                logging.info(summary_text)
+                return {'summary': summary_text}
         else:
             abort(400, message="text field not found in post request")
-
-    def file_summary(self):
-        ...
