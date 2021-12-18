@@ -1,7 +1,6 @@
 from flask_restful import Resource, reqparse, abort
 from resources.summarizer import get_text_from_str
 
-
 class TextController(Resource):
     def get(self):
         return "This is: /api/v1/text"
