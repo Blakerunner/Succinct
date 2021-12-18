@@ -16,8 +16,6 @@ class FileController(Resource):
         if args['file']:
             file = args['file']
             with open(file, 'r') as infile:
-                summary_text = get_text_from_file(file.text)
-                logging.info(summary_text)
-                return {'summary': summary_text}
+                return {'summary': "summary_text"}
         else:
             abort(400, message="text field not found in post request")
