@@ -11,6 +11,7 @@ from sumy.utils import get_stop_words
 import requests
 import nltk
 from PyPDF2 import PdfFileReader
+import docx2txt
 
 nltk.download('punkt')
 
@@ -50,8 +51,9 @@ def get_text_from_file(file_name: str) -> list:
         return get_summary_from_parser(parser, LANGUAGE)
 
 
-def get_text_from_word():
-    pass
+def get_text_from_word(file_name: str) -> str:
+    doc = docx2txt.process(file_name)
+    return get_text_from_str(doc)
 
 
 def get_text_from_pdf(file_name: str) -> str:
