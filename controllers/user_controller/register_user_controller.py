@@ -21,8 +21,7 @@ class RegisterUserController(Resource):
             user_exists = User.query.filter_by(email=email).first() is not None
 
             if user_exists:
-                return jsonify({"error": "User already exists"}), 409
-
+                abort(409, message="User already exists")
             hashed_password = bcrypt.generate_password_hash(password)
             new_user = User(email=email, password=hashed_password)
             db.session.add(new_user)
@@ -30,9 +29,6 @@ class RegisterUserController(Resource):
 
             session["user_id"] = new_user.id
 
-            return jsonify({
-                "id": new_user.id,
-                "email": new_user.email
-            })
+            return {"id": new_user.id, "email": new_user.email}
         else:
-            abort(400, message="text field not found in post request")
+            abort(400, message="Register Failed")

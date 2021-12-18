@@ -21,10 +21,10 @@ class LoginUserController(Resource):
             user = User.query.filter_by(email=email).first()
 
             if user is None:
-                return {"error": "Unauthorized"}, 401
+                abort(401, message="Unauthorized")
 
             if not bcrypt.check_password_hash(user.password, password):
-                return {"error": "Unauthorized"}, 401
+                abort(401, message="Unauthorized")
 
             session["user_id"] = user.id
 

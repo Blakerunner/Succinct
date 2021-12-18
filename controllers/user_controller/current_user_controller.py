@@ -11,7 +11,7 @@ class CurrentUserController(Resource):
         user_id = session.get("user_id")
 
         if not user_id:
-            return {"error": "Unauthorized"}, 401
+            abort(401, message="Unauthorized")
 
         user = User.query.filter_by(id=user_id).first()
         return {
