@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
-
-db = SQLAlchemy()
+from models.db import db
 
 
 def get_uuid():

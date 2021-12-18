@@ -1,7 +1,9 @@
 from flask_restful import Resource, reqparse, abort
 from flask import jsonify, session
 from models.user import User, db
-from app import bcrypt
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
 
 
 class RegisterUserController(Resource):
