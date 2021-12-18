@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 from controllers.file_controller import FileController
 from controllers.text_controller import TextController
 from controllers.url_controller import UrlController
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 api.add_resource(TextController, '/api/v1/text')
