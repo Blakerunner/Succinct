@@ -1,14 +1,20 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse, abort
+
 
 class TextController(Resource):
     def get(self):
-        return "This is: /api/v1/url"
+        return "This is: /api/v1/text"
 
     def post(self):
-        return {'summary': "Summary of TEXT text."}
+        parser = reqparse.RequestParser()
+        parser.add_argument('text', type=str, help='Text to be summarized', required=True)
+        args = parser.parse_args()
+        if args['text']:
+            text = args['text']
+            summary_text = self.text_summary(text)
+            return {'summary': summary_text}
+        else:
+            abort(400, message="text field not found in post request")
 
-    # def post_text_summary():
-    #     text = request.values.get('text')
-    #     summary = get_text_from_str(text, 'english')[0]
-    #     return_dict = {"text": str(summary)}
-    #     return json.dumps(return_dict)
+    def text_summary(self, text: str):
+        return text[:15].split()
