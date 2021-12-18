@@ -1,5 +1,8 @@
-from flask_restful import Resource, reqparse, abort
+import logging
 import werkzeug
+from flask_restful import Resource, reqparse, abort
+from resources.summarizer import get_text_from_file
+
 
 class FileController(Resource):
     def get(self):
@@ -16,6 +19,3 @@ class FileController(Resource):
             return {'summary': summary_text}
         else:
             abort(400, message="text field not found in post request")
-
-    def file_summary(self):
-        ...
