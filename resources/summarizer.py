@@ -10,6 +10,8 @@ from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 import requests
 import nltk
+from PyPDF2 import PdfFileReader
+import docx2txt
 
 nltk.download('punkt')
 
@@ -40,20 +42,29 @@ def get_text_from_file(file_name: str) -> list:
     :param file_name: a str, language: string
     :return: list of strings
     """
-    parser = PlaintextParser.from_file(file_name, Tokenizer(LANGUAGE))
-    return get_summary_from_parser(parser, LANGUAGE)
+    if file_name[file_name.rfind('.') + 1:] == "pdf":
+        return get_text_from_pdf(file_name)
+    elif file_name[file_name.rfind('.') + 1:] == "docx":
+        return get_text_from_word(file_name)
+    else:
+        return get_text_from_txt(file_name)
 
 
-def get_text_from_word():
-    pass
+def get_text_from_txt(file_name):
+    with open(file_name, "r", encoding="utf-8") as f:
+        data = f.read()
+        return get_text_from_str(data)
 
 
-def get_text_from_pdf():
-    pass
+def get_text_from_word(file_name: str) -> list:
+    doc = docx2txt.process(file_name)
+    return get_text_from_str(doc)
 
 
-def get_text_from_txt():
-    pass
+def get_text_from_pdf(file_name: str) -> list:
+    pdf = PdfFileReader(file_name)
+    pdf_str = "\n".join([pdf.getPage(page).extractText() for page in range(pdf.numPages)])
+    return get_text_from_str(pdf_str)
 
 
 def get_text_from_str(text: str) -> list:
