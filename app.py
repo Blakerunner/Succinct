@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 from config import ApplicationConfig
+from controllers.db_controller import DBController
 from controllers.file_controller import FileController
 from controllers.text_controller import TextController
 from controllers.url_controller import UrlController
@@ -27,6 +28,7 @@ api.add_resource(LoginUserController, '/api/v1/users/login')
 api.add_resource(RegisterUserController, '/api/v1/users/register')
 api.add_resource(LogoutUserController, '/api/v1/users/logout')
 api.add_resource(CurrentUserController, '/api/v1/users/current_user')
+api.add_resource(DBController, '/api/v1/users/queries')
 
 
 @app.route('/')

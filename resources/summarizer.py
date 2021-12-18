@@ -1,13 +1,18 @@
 from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
+import json
+
 from sumy.parsers.html import HtmlParser
 from langdetect import detect
+from models.db import db
+from models.user import User
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
+from flask import session
 import requests
 import nltk
 from PyPDF2 import PdfFileReader
@@ -30,6 +35,7 @@ def get_text_from_url(url: str, summary_length: int = 10) -> list:
     language = request.headers["Content-language"]
     try:
         parser = HtmlParser.from_url(url, Tokenizer(language))
+        update_user(url=url)
         return get_summary_from_parser(parser, language, summary_length)
     except LookupError:
         print("Language not supported")
@@ -85,7 +91,26 @@ def get_text_from_pdf(file_name: str, summary_length: int = 10) -> list:
     return get_text_from_str(pdf_str, summary_length)
 
 
-def get_text_from_str(text: str, summary_length: int = 10) -> list:
+def update_user_text(user, text, curr_text):
+    if curr_text:
+        user.queries = json.dumps([text] + json.loads(curr_text))
+        db.session.commit()
+    else:
+        user.queries = json.dumps([text])
+        db.session.commit()
+
+
+def update_user(text=None, url=None):
+    if not (text or url):
+        return
+
+    user_id = session.get("user_id")
+    user = User.query.filter_by(id=user_id).first()
+    curr_text = user.queries
+    update_user_text(user, text, curr_text)
+
+
+def get_text_from_str(text: str, summary_length:int = 10) -> list:
     """
     Return summarized text from the text string.
     :param summary_length: length of the summary in lines.
@@ -97,6 +122,7 @@ def get_text_from_str(text: str, summary_length: int = 10) -> list:
         language = 'zh'
     try:
         parser = PlaintextParser.from_string(text, Tokenizer(language))
+        update_user(text=text)
         return get_summary_from_parser(parser, language, summary_length)
     except LookupError:
         print("Language not supported")
