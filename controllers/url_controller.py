@@ -1,7 +1,5 @@
 from flask_restful import Resource, reqparse, abort
-
 from resources.summarizer import get_text_from_url
-
 
 class UrlController(Resource):
     def get(self):
@@ -9,7 +7,7 @@ class UrlController(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('url', type=str, help='Text to be summarized', required=True)
+        parser.add_argument('url', type=str, help='Url to be summarized', required=True)
         args = parser.parse_args()
         if args['url']:
             url = args['url']
