@@ -10,6 +10,7 @@ from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 import requests
 import nltk
+from PyPDF2 import PdfFileReader
 
 nltk.download('punkt')
 
@@ -40,20 +41,23 @@ def get_text_from_file(file_name: str) -> list:
     :param file_name: a str, language: string
     :return: list of strings
     """
-    parser = PlaintextParser.from_file(file_name, Tokenizer(LANGUAGE))
-    return get_summary_from_parser(parser, LANGUAGE)
+    if file_name[file_name.rfind('.') + 1:] == "pdf":
+        return get_text_from_pdf(file_name)
+    elif file_name[file_name.rfind('.') + 1:] == "docx":
+        return get_text_from_word(file_name)
+    else:
+        parser = PlaintextParser.from_file(file_name, Tokenizer(LANGUAGE))
+        return get_summary_from_parser(parser, LANGUAGE)
 
 
 def get_text_from_word():
     pass
 
 
-def get_text_from_pdf():
-    pass
-
-
-def get_text_from_txt():
-    pass
+def get_text_from_pdf(file_name: str) -> str:
+    pdf = PdfFileReader(file_name)
+    pdf_str = "\n".join([pdf.getPage(page).extractText() for page in range(pdf.numPages)])
+    return get_text_from_str(pdf_str)
 
 
 def get_text_from_str(text: str) -> list:
@@ -86,3 +90,4 @@ def get_summary_from_parser(parser: PlaintextParser, language: str):
     summarizer = Summarizer(stemmer)
     summarizer.stop_words = get_stop_words(language)
     return [str(sentence) for sentence in summarizer(parser.document, SENTENCES_COUNT)]
+
