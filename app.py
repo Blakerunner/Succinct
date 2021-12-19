@@ -19,24 +19,10 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-CORS_ALLOW_ORIGIN = "*,*"
-CORS_EXPOSE_HEADERS = "*,*"
-CORS_ALLOW_HEADERS = "content-type,*"
-cors = CORS(app, origins=CORS_ALLOW_ORIGIN.split(","), allow_headers=CORS_ALLOW_HEADERS.split(","),
-            expose_headers=CORS_EXPOSE_HEADERS.split(","), supports_credentials=True)
+cors = CORS(app, supports_credentials=True)
 api = Api(app)
 
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
-
 
 api.add_resource(TextController, '/api/v1/text')
 api.add_resource(FileController, '/api/v1/file')
