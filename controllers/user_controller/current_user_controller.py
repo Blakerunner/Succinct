@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from flask import session
 from models.user import User
 from flask_bcrypt import Bcrypt

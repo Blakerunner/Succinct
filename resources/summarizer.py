@@ -105,6 +105,9 @@ def update_user(text=None, url=None):
         return
 
     user_id = session.get("user_id")
+    if not user_id:
+        return
+
     user = User.query.filter_by(id=user_id).first()
     curr_text = user.queries
     update_user_text(user, text, curr_text)
