@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 from config import ApplicationConfig
+from controllers.db_controller import DBController
 from controllers.file_controller import FileController
 from controllers.text_controller import TextController
 from controllers.url_controller import UrlController
@@ -12,13 +13,30 @@ from controllers.user_controller.logout_user_controller import LogoutUserControl
 from controllers.user_controller.current_user_controller import CurrentUserController
 
 app = Flask(__name__)
+app.secret_key = "1234"
 app.config.from_object(ApplicationConfig)
 db.init_app(app)
 with app.app_context():
     db.create_all()
 
-CORS(app)
+CORS_ALLOW_ORIGIN = "*,*"
+CORS_EXPOSE_HEADERS = "*,*"
+CORS_ALLOW_HEADERS = "content-type,*"
+cors = CORS(app, origins=CORS_ALLOW_ORIGIN.split(","), allow_headers=CORS_ALLOW_HEADERS.split(","),
+            expose_headers=CORS_EXPOSE_HEADERS.split(","), supports_credentials=True)
 api = Api(app)
+
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
 
 api.add_resource(TextController, '/api/v1/text')
 api.add_resource(FileController, '/api/v1/file')
@@ -27,6 +45,7 @@ api.add_resource(LoginUserController, '/api/v1/users/login')
 api.add_resource(RegisterUserController, '/api/v1/users/register')
 api.add_resource(LogoutUserController, '/api/v1/users/logout')
 api.add_resource(CurrentUserController, '/api/v1/users/current_user')
+api.add_resource(DBController, '/api/v1/users/queries')
 
 
 @app.route('/')

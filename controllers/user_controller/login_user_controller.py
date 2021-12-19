@@ -1,3 +1,4 @@
+from flask_cors import cross_origin
 from flask_restful import Resource, reqparse, abort
 from flask import session
 from models.user import User
@@ -27,6 +28,7 @@ class LoginUserController(Resource):
                 abort(401, message="Unauthorized")
 
             session["user_id"] = user.id
+            session.permanent = True
 
             return {
                 "id": user.id,
