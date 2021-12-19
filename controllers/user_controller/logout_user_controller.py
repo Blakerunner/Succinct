@@ -4,6 +4,7 @@ from flask import session
 
 class LogoutUserController(Resource):
     def get(self):
+        session.permanent = True
         session.pop("user_id")
         return "200"
 

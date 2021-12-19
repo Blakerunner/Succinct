@@ -1,3 +1,4 @@
+from flask_cors import cross_origin
 from flask_restful import Resource, abort
 from flask import session
 from models.user import User
@@ -9,6 +10,7 @@ bcrypt = Bcrypt()
 class CurrentUserController(Resource):
     def get(self):
         user_id = session.get("user_id")
+        session.permanent = True
 
         if not user_id:
             abort(401, message="Unauthorized")

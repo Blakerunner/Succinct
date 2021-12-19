@@ -28,6 +28,7 @@ class RegisterUserController(Resource):
             db.session.commit()
 
             session["user_id"] = new_user.id
+            session.permanent = True
 
             return {"id": new_user.id, "email": new_user.email}
         else:
