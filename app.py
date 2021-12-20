@@ -24,19 +24,19 @@ api = Api(app)
 
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
-api.add_resource(TextController, '/api/v1/text')
-api.add_resource(FileController, '/api/v1/file')
-api.add_resource(UrlController, '/api/v1/url')
-api.add_resource(LoginUserController, '/api/v1/users/login')
-api.add_resource(RegisterUserController, '/api/v1/users/register')
-api.add_resource(LogoutUserController, '/api/v1/users/logout')
-api.add_resource(CurrentUserController, '/api/v1/users/current_user')
-api.add_resource(DBController, '/api/v1/users/queries')
+api.add_resource(TextController, '/v1/text')
+api.add_resource(FileController, '/v1/file')
+api.add_resource(UrlController, '/v1/url')
+api.add_resource(LoginUserController, '/v1/users/login')
+api.add_resource(RegisterUserController, '/v1/users/register')
+api.add_resource(LogoutUserController, '/v1/users/logout')
+api.add_resource(CurrentUserController, '/v1/users/current_user')
+api.add_resource(DBController, '/v1/users/queries')
 
 
 @app.route('/')
-def hello_world():
-    return "Hello World!!"
+def base_url():
+    return "Succinct API!!"
 
 
 if __name__ == '__main__':
