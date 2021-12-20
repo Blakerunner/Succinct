@@ -26,3 +26,5 @@ Restful APIs, Flask application structure, React native
 
 ## What's next for Succinct
 Implementing data analytics on user's queries to find trends.
+
+![succinct](succinct-business.png)
